@@ -25,6 +25,8 @@ let persons = [
 	},
 ];
 
+app.use(express.json());
+
 app.get("/info", (request, response) => {
 	response.send(
 		`<p>Phonebook has info for ${
@@ -49,6 +51,27 @@ app.delete("/api/persons/:id", (request, response) => {
 	persons.filter((person) => person.id !== id);
 
 	response.status(204).end();
+});
+
+const generateId = () => {
+	const newId = Math.floor(Math.random() * 9000) + 1000;
+	const isUnique = !persons.some((person) => person.id === newId);
+
+	return isUnique ? newId : generateId();
+};
+
+app.post("/api/persons/", (request, response) => {
+	const body = request.body;
+
+	const person = {
+		name: body.name,
+		number: body.number,
+		id: generateId(),
+	};
+
+	persons = persons.concat(person);
+
+	response.json(person);
 });
 
 app.listen(PORT, () => {
