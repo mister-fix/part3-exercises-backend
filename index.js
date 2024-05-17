@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const morgan = require("morgan");
 const PORT = 3001;
 
 let persons = [
@@ -26,6 +27,7 @@ let persons = [
 ];
 
 app.use(express.json());
+app.use(morgan("tiny"));
 
 app.get("/info", (request, response) => {
 	response.send(
