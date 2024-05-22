@@ -28,12 +28,8 @@ let persons = [
 
 app.use(express.json());
 
-morgan.token("body", (request) => {
-	if (request.method === "POST") {
-		return JSON.stringify(request.body);
-	}
-
-	return "";
+morgan.token("body", (request, response) => {
+	return request.method === "POST" ? JSON.stringify(request.body) : "";
 });
 
 app.use(
